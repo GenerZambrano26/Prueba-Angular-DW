@@ -1,0 +1,43 @@
+
+
+<div class="card">
+    <div class="card-body">
+        <dx-button text="Agregar Factura" type="success" (onClick)="ModalAgregarFactura()"></dx-button>
+        <h4 class="card-title">Lista Facturas</h4>
+
+        <dx-data-grid [dataSource]="dataFacturas" [hoverStateEnabled]="true" [showBorders]="true" [showRowLines]="true">
+            <dxo-paging [pageSize]="10"></dxo-paging>
+            <dxo-selection mode="single"></dxo-selection>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 15, 20, 50]"></dxo-pager>
+
+            <dxi-column caption="Fecha" dataField="fecha" alignment="center" [allowEditing]="false"></dxi-column>
+            <dxi-column caption="Nit" dataField="tercero.identificacion"  alignment="center" [allowEditing]="false"></dxi-column>
+            <dxi-column caption="Nombres" dataField="tercero.nombreCompleto" alignment="center" [allowEditing]="false"></dxi-column>
+            <dxi-column caption="Detalle" dataField="detalle" width="500" cellTemplate="detalleTemplate" alignment="center" [allowEditing]="false"></dxi-column>
+            <dxi-column caption="Total" dataField="total" [format]="',##0.###'" alignment="left" [allowEditing]="false"></dxi-column>
+            <dxi-column width="200" alignment="center" caption="Opciones" cellTemplate="buttomTemplate"></dxi-column>
+            <div *dxTemplate="let cellData of 'detalleTemplate'">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-left" scope="col">Producto</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of cellData.key.detalle">
+                            <td class="text-left">{{ item.producto }}</td>
+                            <td>{{ item.cantidad }}</td>
+                            <td>{{ item.subtotal | number }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *dxTemplate="let cellData of 'buttomTemplate'">
+                <dx-button icon="edit" text="" stylingMode="container" type="success" (onClick)="ModalEditarFactura(cellData.key)"> </dx-button>
+                <dx-button icon="trash" text="" stylingMode="container" type="danger" class="ml-4" (onClick)="EliminarFactura(cellData.key.cod)"> </dx-button>
+            </div>
+        </dx-data-grid>
+    </div>
+</div>

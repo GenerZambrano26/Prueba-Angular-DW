@@ -1,0 +1,5 @@
+<app-factura [dataFacturasInput]="dataFacturas" (eventoFactura)="EventoFacturaRecibe($event)" ></app-factura>
+
+<dx-popup [(visible)]="showPopup" [title]="TituloPopup"  [height]="'auto'" [width]="'800px'" [dragEnabled]="false" [closeOnOutsideClick]="true" class="popup" >
+    <app-factura-detalle *ngIf="showPopup" [facturaData]="dataFactura" (eventoFactura)="EventoFacturaRecibe($event)" ></app-factura-detalle>
+</dx-popup>

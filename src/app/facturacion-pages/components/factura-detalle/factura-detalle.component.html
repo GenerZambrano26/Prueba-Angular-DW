@@ -1,0 +1,47 @@
+<dx-form #formDataFactura [(formData)]="formFactura" [showColonAfterLabel]="false" labelLocation="top" >
+        
+    <dxi-item itemType="group" [colCount]="2">
+        <dxi-item dataField="codTercero" editorType="dxSelectBox" [colSpan]="1" [label]="{ text: 'Tercero' }" 
+           [editorOptions]="{ dataSource: dataTerceros, searchEnabled: true, displayExpr: 'nombreCompleto',valueExpr: 'cod' }" [disabled]="enEdicion">
+           <dxi-validation-rule type="required" message="Tercero requerido"></dxi-validation-rule>
+       </dxi-item>
+        <dxi-item dataField="fecha" editorType="dxDateBox" [colSpan]="1" [label]="{ text: 'Fecha' }" [disabled]="enEdicion">
+            <dxi-validation-rule type="required" message="Fecha requerida"></dxi-validation-rule>
+        </dxi-item>
+    </dxi-item>
+   
+    <dxi-item itemType="group" [colCount]="5">
+        <dx-form [(formData)]="formDetalleFactura" [showColonAfterLabel]="false" labelLocation="top" colCount="5" >
+            <dxi-item dataField="codproducto" editorType="dxSelectBox" [colSpan]="2" [label]="{ text: 'Producto' }" 
+                [editorOptions]="{ dataSource: dataProductos, searchEnabled: true, displayExpr: 'descripcion', valueExpr: 'cod', onSelectionChanged: SelectProductoChange }" >
+            </dxi-item>
+            <dxi-item dataField="cantidad" editorType="dxNumberBox" [colSpan]="2" [label]="{ text: 'Cantidad' }" 
+                [editorOptions]="{ width: '100%',onSelectionChanged: CantidadChange }">
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="1">
+                <dx-button icon="add" text="" stylingMode="outlined" type="success" class="mt-4" (onClick)="AgregarProductoDetalle()"> </dx-button>
+            </dxi-item>
+        </dx-form>            
+    </dxi-item>
+
+    <dxi-item itemType="group" [colCount]="12">
+        <dx-data-grid [dataSource]="ListaDetalleProductos" [remoteOperations]="true" [hoverStateEnabled]="true" [showBorders]="true" [showRowLines]="true" (onRowRemoving)="EliminarProductoFacturaDetalle($event)">
+            <dxo-editing mode="cell" [allowUpdating]="false" [allowDeleting]="true" [useIcons]="true"></dxo-editing>
+            <dxi-column caption="Producto" dataField="producto" alignment="center" [allowEditing]="false"></dxi-column>
+            <dxi-column caption="Precio" dataField="precio" [format]="',##0.###'" alignment="center" [allowEditing]="false"></dxi-column>
+            <dxi-column caption="Cantidad" dataField="cantidad" alignment="center" [allowEditing]="false"></dxi-column>
+            <dxi-column caption="Subtotal" dataField="subtotal" [format]="',##0.###'" alignment="center" [allowEditing]="false"></dxi-column>
+            <dxi-column type="buttons" width="70" alignment="center" caption="Eliminar"></dxi-column>
+        </dx-data-grid>
+    </dxi-item>
+
+    <dxi-item editorType="dxNumberBox" [label]="{ text: 'Total' }" >
+        <dx-number-box [value]="formFactura.total" [readOnly]="true" format="#,##0.00"></dx-number-box>
+    </dxi-item>
+
+    <dxi-item>
+        <dx-button text="Guardar" type="success" (onClick)="AgregarFactura()" *ngIf="!enEdicion"> </dx-button>
+        <dx-button text="Actualizar" type="default" (onClick)="ActualizarFactura()" *ngIf="enEdicion"></dx-button>
+    </dxi-item>   
+</dx-form>
+
